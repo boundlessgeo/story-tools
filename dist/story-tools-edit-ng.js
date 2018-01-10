@@ -538,7 +538,12 @@
                 return style;
             }
 
+            // allow the style choices to be modified by a given function.
             $scope.styleChoices = stStyleChoices;
+            if ($scope.updateStyleChoices !== undefined) {
+              $scope.styleChoices = $scope.updateStyleChoices(stStyleChoices);
+            }
+
             setLayer($scope.layer);
 
             $scope.setActiveStyle = setActiveStyle;
@@ -627,7 +632,7 @@
                       scope.$parent.activeStyle[([property || scope.property])] = update;
                       console.log((property || scope.property) + ' updated');
                     };
-                    scope.styleChoices = styleChoices;
+                    scope.styleChoices = scope.$parent.styleChoices;
                     if (linker) {
                         linker(scope, element, attrs);
                     }
@@ -701,6 +706,7 @@
                 formChanged : '=',
                 control : '=',
                 layerstyles: '=',
+                updateStyleChoices: '=',
             }
         };
     });
