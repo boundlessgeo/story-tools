@@ -1,7 +1,7 @@
 <div ng-click="updateProperty(model)" ng-form="stroke" class="style-editor-item">
     <div class="title">Stroke</div>
     <div class="controls">
-        <div data-dropdown>
+        <div title="Outline style" data-dropdown>
             <button type="button" class="dropdown-toggle"   >
                 {{model.strokeStyle}} <span class="caret"></span>
             </button>
@@ -9,8 +9,8 @@
                 <li ng-repeat="style in styleChoices.strokeStyle" ng-click="model.strokeStyle=style">{{style}}</li>
             </ul>
         </div>
-        <number-editor ng-hide="hideStrokeWidth" st-model="model" property="strokeWidth" max="64"></number-editor>
-        <color-editor st-model="model" property="strokeColor" ></color-editor>
-        <number-editor st-model="model" property="strokeOpacity" max="100"></number-editor>
+        <number-editor title="Outline weight" ng-hide="hideStrokeWidth" st-model="model" property="strokeWidth" max="64"></number-editor>
+        <color-editor title="Outline color" st-model="model" property="strokeColor" ></color-editor>
+        <number-editor title="Outline opacity" st-model="model" property="strokeOpacity" max="100"></number-editor>
     </div>
 </div>
