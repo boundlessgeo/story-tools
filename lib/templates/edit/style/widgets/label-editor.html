@@ -16,10 +16,12 @@
         <color-editor title="Label text color" st-model="model" property="fillColor" ></color-editor>
         <div class="btn-group">
             <button title="Bold label text" class="btn" ng-model="styleModel.bold" btn-checkbox ng-change="styleModelChange()"><strong>B</strong></button>
-            <button title="Underline label text" class="btn" ng-model="styleModel.underline" ng-change="styleModelChange()"><u>U</u></button>
             <button title="Italicize label text" class="btn" ng-model="styleModel.italic" btn-checkbox ng-change="styleModelChange()"><i>I</i></button>
+            <!-- commenting out as of yet implemented options
+            <button title="Underline label text" class="btn" ng-model="styleModel.underline" ng-change="styleModelChange()"><u>U</u></button>
             <button title="Halo label text" class="btn" ng-model="styleModel.halo" ng-change="styleModelChange()">H</button>
             <button title="Dropshadow label text" class="btn" ng-model="styleModel.shadow" ng-change="styleModelChange()">S</button>
+            -->
         </div>
     </div>
 </div>
