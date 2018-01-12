@@ -1,5 +1,5 @@
 {
-  "name": "time-controls",
+  "name": "story-tools",
   "version": "0.0.1",
   "main": [
     "dist/timecontrols.min.js",
