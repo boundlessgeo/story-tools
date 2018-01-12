@@ -986,14 +986,12 @@
     });
     editorDirective('colorEditor', 'color-editor.html');
     editorDirective('labelEditor', 'label-editor.html', 'label', function(scope) {
-        // @todo other options
-        scope.styleModel = {
-            bold : scope.model.fontWeight == 'bold',
-            italic : scope.model.fontStyle == 'italic'
-        };
-        scope.styleModelChange = function() {
-            scope.model.fontWeight = scope.styleModel.bold ? 'bold' : 'normal';
-            scope.model.fontStyle = scope.styleModel.italic ? 'italic' : 'normal';
+        scope.toggleValue = function(changeElement) {
+          if (changeElement === 'fontWeight') {
+            scope.model.fontWeight = (scope.model.fontWeight === 'bold') ? 'normal' : 'bold';
+          } else if(changeElement === 'fontStyle') {
+            scope.model.fontStyle = (scope.model.fontStyle === 'italic') ? 'normal' : 'italic';
+          }
         };
     });
 
