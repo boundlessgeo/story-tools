@@ -77,7 +77,7 @@ exports.SLDStyleConverter = function() {
             return polygon;
         },
         createPointSymbolizer: function(style, styleRule) {
-            var fill = this.createFill(style, styleRule); 
+            var fill = this.createFill(style, styleRule);
             var stroke = this.createStroke(style);
             var graphicOrMark;
             if (style.symbol && style.symbol.graphic) {
