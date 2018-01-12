@@ -1,11 +1,11 @@
 <div ng-click="updateProperty(model)" ng-form="label" class="style-editor-item">
     <div class="title">Label</div>
     <div class="controls">
-        <attribute-combo layer="layer" st-model="model" css="label-attribute" filter="nogeom"></attribute-combo>
-        <number-editor st-model="model" property="fontSize"></number-editor>
+        <attribute-combo title="Layer attribute" layer="layer" st-model="model" css="label-attribute" filter="nogeom"></attribute-combo>
+        <number-editor title="Label text size" st-model="model" property="fontSize"></number-editor>
     </div>
     <div class="controls">
-        <div dropdown>
+        <div dropdown title="Label text font">
             <button type="button" class="dropdown-toggle"   >
                 {{model.fontFamily}} <span class="caret"></span>
             </button>
@@ -13,13 +13,27 @@
                 <li ng-repeat="family in styleChoices.fontFamily" ng-click="model.fontFamily=family">{{family}}</li>
             </ul>
         </div>
-        <color-editor st-model="model" property="fillColor" ></color-editor>
+        <color-editor title="Label text color" st-model="model" property="fillColor" ></color-editor>
         <div class="btn-group">
-            <button class="btn" ng-model="styleModel.bold" btn-checkbox ng-change="styleModelChange()"><strong>B</strong></button>
-            <button class="btn" ng-model="styleModel.underline" ng-change="styleModelChange()"><u>U</u></button>
-            <button class="btn" ng-model="styleModel.italic" btn-checkbox ng-change="styleModelChange()"><i>I</i></button>
-            <button class="btn" ng-model="styleModel.halo" ng-change="styleModelChange()">H</button>
-            <button class="btn" ng-model="styleModel.shadow" ng-change="styleModelChange()">S</button>
+            <button 
+                title="Bold label text"
+                ng-class="{btn: true, active: (model.fontWeight == 'bold')}"
+                ng-click="toggleValue('fontWeight')">
+                    <strong>B</strong>
+            </button>
+
+            <button 
+                title="Italicize label text"
+                ng-class="{btn: true, active: (model.fontStyle === 'italic')}"
+                ng-click="toggleValue('fontStyle')">
+                    <i>I</i>
+            </button>
+
+            <!-- commenting out as of yet implemented options
+            <button title="Underline label text" class="btn" ng-model="styleModel.underline" ng-change="styleModelChange()"><u>U</u></button>
+            <button title="Halo label text" class="btn" ng-model="styleModel.halo" ng-change="styleModelChange()">H</button>
+            <button title="Dropshadow label text" class="btn" ng-model="styleModel.shadow" ng-change="styleModelChange()">S</button>
+            -->
         </div>
     </div>
 </div>
