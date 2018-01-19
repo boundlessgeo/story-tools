@@ -17,6 +17,7 @@
         <div class="btn-group">
             <button 
                 title="Bold label text"
+                type="button"
                 ng-class="{btn: true, active: (model.fontWeight == 'bold')}"
                 ng-click="toggleValue('fontWeight')">
                     <strong>B</strong>
@@ -24,6 +25,7 @@
 
             <button 
                 title="Italicize label text"
+                type="button"
                 ng-class="{btn: true, active: (model.fontStyle === 'italic')}"
                 ng-click="toggleValue('fontStyle')">
                     <i>I</i>
