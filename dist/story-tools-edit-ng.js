@@ -1681,7 +1681,7 @@
         shape: 'circle',
         graphic: null,
         graphicType: null,
-        fillColor: '#f59620',
+        fillColor: '#dd1c77',
         fillOpacity: 70,
         rotationAttribute: null,
         rotationUnits: 'degrees'
@@ -1696,7 +1696,7 @@
 
     var defaultLabel = {
         attribute: null,
-        fillColor: '#f59620',
+        fillColor: '#333333',
         fontFamily: 'Serif',
         fontSize: 10,
         fontStyle: 'normal',
