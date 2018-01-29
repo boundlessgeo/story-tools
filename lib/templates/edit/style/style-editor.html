@@ -19,6 +19,7 @@
         <div align="center" class="right carousel-control" carousel-next on-next="setActiveStyle"><span class="glyphicon glyphicon-chevron-right"></span></div>
     </carousel>
     <div>
+        <div class="warning text-danger" ng-if="warning">{{ warning }}</div>
         <style-type-editor ng-if="layer"></style-type-editor>
         <rules-editor ng-if="activeStyle.rules"></rules-editor>
     </div>
