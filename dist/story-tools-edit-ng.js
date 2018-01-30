@@ -691,7 +691,7 @@
 
                           $scope.warning = false;
                           if (isStyleComplex(prefix, sld_doc)) {
-                            $scope.warning = 'WARNING! This style is complex and any changes saved here will cause a loss that style to be LOST!';
+                            $scope.warning = 'WARNING! This style is complex and any changes saved here will cause that style to be LOST!';
                           }
 
                           var rules = sld_doc.getElementsByTagName(prefix + 'Rule');
