@@ -28,6 +28,14 @@
             </ul>
         </div>
 
+        <number-editor
+            title="Fill opacity"
+            st-model="activeStyle.classify"
+            property="opacity"
+            ng-if="activeStyle.typeName === 'unique-polygon'"
+            max="100">
+        </number-editor>
+
         <div class="btn-group" data-dropdown ng-if="showColorPalette" title="Color palette to apply to rules">
             <button type="button" class="dropdown-toggle"   >
                 <span>{{ activeStyle.classify.colorPalette||'Color Palette'}}</span>

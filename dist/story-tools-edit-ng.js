@@ -749,6 +749,10 @@
                             match_style.active = true;
                             $scope.activeStyle.typeName = match_style.name;
 
+                            if (fill_obj.fillOpacity) {
+                              $scope.activeStyle.classify.opacity = fill_obj.fillOpacity;
+                            }
+
                             var parsed_rules = [];
                             for (var i = 0, ii = rules.length; i < ii; i++) {
                               rule = rules[i];
@@ -857,7 +861,6 @@
             });
 
             $scope.$on('featuretype-added', function(event, layer) {
-                console.log('FeatureType Added for Layer: ', layer);
                 setLayer($scope.layer);
             });
 
@@ -1757,6 +1760,11 @@
                                 val = Math.round(context.rangeStep * context.index);
                             }
                             break;
+                        case 'opacity':
+                          if (context.style.classify.opacity) {
+                            val = context.style.classify.opacity;
+                          }
+                          break;
                         default:
                             throw 'invalid copySource ' + copySource;
                     }
@@ -1836,6 +1844,7 @@
 
     var defaultUniqueClass = {
         method: 'unique',
+        opacity: 100,
         attribute: null,
         maxClasses: 5,
         colorRamp: null
@@ -1875,6 +1884,7 @@
             },
             rule: {
                 symbol : {
+                    fillOpacity: 'opacity',
                     fillColor: 'color'
                 }
             }
@@ -1955,6 +1965,7 @@
             },
             rule: {
                 symbol : {
+                    fillOpacity: 'opacity',
                     fillColor: 'color'
                 }
             }
