@@ -658,6 +658,123 @@
               return (count('RasterSymbolizer') > 0 || count('Transformation') > 0 || count('Rule') > 13);
             }
 
+            function loadStyle(meta) {
+              var style_href = meta.defaultStyle.href;
+              if (style_href) {
+                // strip the hostname from style_href
+                style_href = '/geoserver/' + style_href.split('/geoserver/')[1];
+                // this is an exchange assumption, and assumes SLD
+                style_href = style_href.replace('.json', '.sld');
+
+                fetch(style_href).then(function(r) {
+                  r.text().then(function(sldText) {
+                    var parser = new DOMParser();
+                    var sld_doc = parser.parseFromString(sldText, 'application/xml');
+
+                    var prefix = '';
+                    if (sld_doc.documentElement.tagName.substring(0, 4) === 'sld:') {
+                      prefix = 'sld:';
+                    }
+
+                    $scope.warning = false;
+                    if (isStyleComplex(prefix, sld_doc)) {
+                      $scope.warning = 'WARNING! This style is complex and any changes saved here will cause that style to be LOST!';
+                    }
+
+                    var rules = sld_doc.getElementsByTagName(prefix + 'Rule');
+
+                    var prop, rule, stroke_obj, fill_obj, label_obj;
+
+                    if (rules.length === 1) {
+                      rule = rules[0];
+
+                      stroke_obj = getStrokeObject(prefix, rule);
+                      for (prop in stroke_obj) {
+                        $scope.activeStyle.stroke[prop] = stroke_obj[prop];
+                      }
+
+                      fill_obj = getFillObject(prefix, rule);
+                      for (prop in fill_obj) {
+                        $scope.activeStyle.symbol[prop] = fill_obj[prop];
+                      }
+
+                      label_obj = getLabelObject(prefix, rule);
+                      for (prop in label_obj) {
+                        $scope.activeStyle.label[prop] = label_obj[prop];
+                      }
+                    } else if (rules.length > 1) {
+
+                      // the stroke and symbol can be pulled
+                      //  from the first rule.
+                      rule = rules[0];
+
+                      fill_obj = getFillObject(prefix, rule);
+                      for (prop in fill_obj) {
+                        $scope.activeStyle.symbol[prop] = fill_obj[prop];
+                      }
+
+                      stroke_obj = getStrokeObject(prefix, rule);
+                      for (prop in stroke_obj) {
+                        $scope.activeStyle.stroke[prop] = stroke_obj[prop];
+                      }
+
+                      label_obj = getLabelObject(prefix, rule);
+                      for (prop in label_obj) {
+                        $scope.activeStyle.label[prop] = label_obj[prop];
+                      }
+
+                      // The key attribute can also be pulled from the first
+                      //  rule.
+                      var filter = getFilterObject(rule);
+                      $scope.activeStyle.classify = {
+                        attribute: filter.property,
+                        method: 'unique',
+                        maxClasses: rules.length
+                      };
+
+                      var match_style = getMatchStyleType('unique-');
+                      match_style.active = true;
+                      $scope.activeStyle.typeName = match_style.name;
+
+                      if (fill_obj.fillOpacity) {
+                        $scope.activeStyle.classify.opacity = fill_obj.fillOpacity;
+                      }
+
+                      var parsed_rules = [];
+                      for (var i = 0, ii = rules.length; i < ii; i++) {
+                        rule = rules[i];
+                        filter = getFilterObject(rule);
+
+                        var parsed_rule = {
+                          name: filter.name,
+                          value: filter.value,
+                          style: {}
+                        };
+
+                        if (match_style.name === 'unique-point' || match_style.name === 'unique-polygon') {
+                          parsed_rule.style.symbol = getFillObject(prefix, rule);
+                          // remove the stroke size
+                          delete parsed_rule.style.symbol.size;
+                        } else if (match_style.name === 'unique-line') {
+                          // bring in the stroke.
+                          parsed_rule.style.stroke = getStrokeObject(prefix, rule);
+                        }
+
+                        parsed_rules.push(parsed_rule);
+                      }
+
+                      $scope.activeStyle.rules = parsed_rules;
+
+                      $scope.layer.set('style', $scope.activeStyle);
+
+                      setActiveStyle(match_style);
+                    }
+                  });
+                });
+              }
+
+          }
+
             function setLayer(layer) {
 
                 $scope.layer = layer;
@@ -668,123 +785,28 @@
                     setActiveStyle($scope.styleTypes[activeStyleIndex]);
                 }
 
-                var meta = layer.get('metadata');
+                // the style information load asynchronously,
+                // this checks to see if it is present and  then
+                // makes three attempts to get it.
 
+                var meta = layer.get('metadata');
                 if (meta) {
                   if (meta.defaultStyle) {
-                    var style_href = meta.defaultStyle.href;
-                    if (style_href) {
-                      // strip the hostname from style_href
-                      style_href = '/geoserver/' + style_href.split('/geoserver/')[1];
-                      // this is an exchange assumption, and assumes SLD
-                      style_href = style_href.replace('.json', '.sld');
-
-                      fetch(style_href).then(function(r) {
-                        r.text().then(function(sldText) {
-                          var parser = new DOMParser();
-                          var sld_doc = parser.parseFromString(sldText, 'application/xml');
-
-                          var prefix = '';
-                          if (sld_doc.documentElement.tagName.substring(0, 4) === 'sld:') {
-                            prefix = 'sld:';
-                          }
-
-                          $scope.warning = false;
-                          if (isStyleComplex(prefix, sld_doc)) {
-                            $scope.warning = 'WARNING! This style is complex and any changes saved here will cause that style to be LOST!';
-                          }
-
-                          var rules = sld_doc.getElementsByTagName(prefix + 'Rule');
-
-                          var prop, rule, stroke_obj, fill_obj, label_obj;
-
-                          if (rules.length === 1) {
-                            rule = rules[0];
-
-                            stroke_obj = getStrokeObject(prefix, rule);
-                            for (prop in stroke_obj) {
-                              $scope.activeStyle.stroke[prop] = stroke_obj[prop];
-                            }
-
-                            fill_obj = getFillObject(prefix, rule);
-                            for (prop in fill_obj) {
-                              $scope.activeStyle.symbol[prop] = fill_obj[prop];
-                            }
-
-                            label_obj = getLabelObject(prefix, rule);
-                            for (prop in label_obj) {
-                              $scope.activeStyle.label[prop] = label_obj[prop];
-                            }
-                          } else if (rules.length > 1) {
-
-                            // the stroke and symbol can be pulled
-                            //  from the first rule.
-                            rule = rules[0];
-
-                            fill_obj = getFillObject(prefix, rule);
-                            for (prop in fill_obj) {
-                              $scope.activeStyle.symbol[prop] = fill_obj[prop];
-                            }
-
-                            stroke_obj = getStrokeObject(prefix, rule);
-                            for (prop in stroke_obj) {
-                              $scope.activeStyle.stroke[prop] = stroke_obj[prop];
-                            }
-
-                            label_obj = getLabelObject(prefix, rule);
-                            for (prop in label_obj) {
-                              $scope.activeStyle.label[prop] = label_obj[prop];
-                            }
-
-                            // The key attribute can also be pulled from the first
-                            //  rule.
-                            var filter = getFilterObject(rule);
-                            $scope.activeStyle.classify = {
-                              attribute: filter.property,
-                              method: 'unique',
-                              maxClasses: rules.length
-                            };
-
-                            var match_style = getMatchStyleType('unique-');
-                            match_style.active = true;
-                            $scope.activeStyle.typeName = match_style.name;
-
-                            if (fill_obj.fillOpacity) {
-                              $scope.activeStyle.classify.opacity = fill_obj.fillOpacity;
-                            }
-
-                            var parsed_rules = [];
-                            for (var i = 0, ii = rules.length; i < ii; i++) {
-                              rule = rules[i];
-                              filter = getFilterObject(rule);
-
-                              var parsed_rule = {
-                                name: filter.name,
-                                value: filter.value,
-                                style: {}
-                              };
-
-                              if (match_style.name === 'unique-point' || match_style.name === 'unique-polygon') {
-                                parsed_rule.style.symbol = getFillObject(prefix, rule);
-                                // remove the stroke size
-                                delete parsed_rule.style.symbol.size;
-                              } else if (match_style.name === 'unique-line') {
-                                // bring in the stroke.
-                                parsed_rule.style.stroke = getStrokeObject(prefix, rule);
-                              }
-
-                              parsed_rules.push(parsed_rule);
-                            }
-
-                            $scope.activeStyle.rules = parsed_rules;
-
-                            $scope.layer.set('style', $scope.activeStyle);
-
-                            setActiveStyle(match_style);
-                          }
-                        });
-                      });
-                    }
+                    loadStyle(meta);
+                  } else {
+                    var attempts = 0;
+                    var loading_interval = setInterval(function() {
+                      meta = layer.get('metadata');
+                      if (meta.defaultStyle) {
+                        loadStyle(meta);
+                        clearInterval(loading_interval);
+                      } else {
+                        attempts += 1;
+                        if (attempts > 3) {
+                          clearInterval(loading_interval);
+                        }
+                      }
+                    }, 500);
                   }
                 }
             }
