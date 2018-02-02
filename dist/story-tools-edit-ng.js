@@ -1042,10 +1042,13 @@
                                     a.type === 'double' ||
                                     a.type === 'long';
                             } else if (attrs.filter === 'unique') {
+                              include = (a.type === 'string');
+                              /*
                                 include = a.type === 'integer' ||
                                     a.type === 'int' ||
                                     a.type === 'string' ||
                                     a.type === 'long';
+                              */
                             } else if (attrs.filter) {
                                 $log.warn('unknown filter', attrs.filter);
                             }
