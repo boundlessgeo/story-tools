@@ -1,11 +1,11 @@
 {
-  "name": "storytools",
-  "version": "0.0.1",
-  "description": "time slider and timeline controls for maps",
+  "name": "@boundlessgeo/storytools",
+  "version": "1.0.0-alpha2",
+  "description": "Additional maploom tools",
   "homepage": "",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mapstory/time-controls.git"
+    "url": "git://github.com/boundlessgeo/storytools.git"
   },
   "keywords": [
     "time",
