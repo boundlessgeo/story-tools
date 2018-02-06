@@ -28,11 +28,13 @@
             </ul>
         </div>
 
-        <number-editor
+        <input
+            type="number"
             title="Fill opacity"
-            st-model="activeStyle.classify"
-            property="opacity"
+            ng-model="activeStyle.classify.opacity"
             ng-if="activeStyle.typeName === 'unique-polygon'"
+            ng-change="changeClassifyProperty()"
+            min="0"
             max="100">
         </number-editor>
 
