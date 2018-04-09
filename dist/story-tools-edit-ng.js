@@ -937,7 +937,6 @@
                     scope.model = scope.stModel[property || scope.property];
                     scope.updateProperty = function(update) {
                       scope.$parent.activeStyle[([property || scope.property])] = update;
-                      console.log((property || scope.property) + ' updated');
                     };
                     scope.styleChoices = scope.$parent.styleChoices;
                     if (linker) {
@@ -1120,6 +1119,22 @@
         }
         el[0].addEventListener('DOMMouseScroll', wheel, false ); // For FF and Opera
         el[0].addEventListener('mousewheel', wheel, false ); // For others
+        el[0].addEventListener('change', function(evt) {
+            var input = el.find('input');
+            var min = Number(input.attr('min')) || 0;
+            var max = Number(input.attr('max'));
+            var val = scope.stModel[scope.property];
+
+            if (val < min) {
+              scope.$apply(function() {
+                  scope.stModel[scope.property] = min;
+              });
+            } else if (val > max) {
+              scope.$apply(function() {
+                  scope.stModel[scope.property] = max;
+              });
+            }
+        });
     });
     editorDirective('colorEditor', 'color-editor.html');
     editorDirective('labelEditor', 'label-editor.html', 'label', function(scope) {
@@ -1219,6 +1234,10 @@
                         });
                     });
                 };
+
+                scope.$watch('symbol.shape', function() {
+                  current();
+                });
             }
         };
     }]);
