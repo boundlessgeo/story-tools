@@ -1,23 +1,18 @@
 <form name="editorForm">
-    <div class="style-type-header" ng-if="control.default">
-        <div class="btn-group" data-dropdown>
-            <button type="button" class="btn btn-default dropdown-toggle">
-                Style: {{currentEditor.displayName}}<span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-                <li ng-repeat="styleType in styleTypes" ng-click="setActiveStyle(styleType)">{{styleType.displayName}}</li>
-            </ul>
+    <div class="style-panel" ng-repeat="styleType in styleTypes" ng-show="styleType.active">
+        <div class="slide-title">
+            <a class="prev" ng-click="onPrev()">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+            </a>
+            {{ styleType.displayName }}
+            <a class="next" ng-click="onNext()">
+                <i class="glyphicon glyphicon-chevron-right"></i>
+            </a>
+        </div>
+
+        <div class="item {{styleType.displayName|lowercase}}" data-slide-number="{{$index}}">
         </div>
     </div>
-    <carousel interval="-1" no-wrap="false" ng-if="control.carousel">
-      <slide ng-repeat="styleType in styleTypes" active="styleType.active">
-          <div class="item {{styleType.displayName|lowercase}}" data-slide-number="{{$index}}">
-              <div class="slide-title">{{styleType.displayName}}</div>
-          </div>
-      </slide>
-        <div align="center" class="left carousel-control" carousel-prev on-prev="setActiveStyle"><span class="glyphicon glyphicon-chevron-left"></span></div>
-        <div align="center" class="right carousel-control" carousel-next on-next="setActiveStyle"><span class="glyphicon glyphicon-chevron-right"></span></div>
-    </carousel>
     <div>
         <div class="warning text-danger" ng-if="warning">{{ warning }}</div>
         <style-type-editor ng-if="layer"></style-type-editor>

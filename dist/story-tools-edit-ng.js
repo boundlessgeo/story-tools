@@ -900,6 +900,30 @@
                 }
             }, true);
 
+            function changeStyle(delta) {
+              var n_types = $scope.styleTypes.length;
+              var idx = getStyleTypeIndex();
+              var new_idx = idx + delta;
+              if (new_idx < 0) {
+                new_idx = n_types - 1;
+              } else if (new_idx >= n_types) {
+                new_idx = 0;
+              }
+
+              for (var i = 0; i < n_types; i++) {
+                $scope.styleTypes[i].active = (i === new_idx);
+              }
+              setActiveStyle($scope.styleTypes[new_idx]);
+            }
+
+            $scope.onPrev = function() {
+              changeStyle(-1);
+            };
+
+            $scope.onNext = function() {
+              changeStyle(1);
+            };
+
             $scope.$watch('editorForm.$valid', function() {
                 ($scope.formChanged || angular.noop)($scope.editorForm);
             });

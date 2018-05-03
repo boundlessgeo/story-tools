@@ -133,11 +133,23 @@
 
 .slide-title{
     font-size: 25px;
-    position: absolute;
-    bottom: 2px;
     width: 100%;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,.7);
     color: white;
+    position: relative;
+    padding: 3px;
+
+    text-align: center;
+
+    .prev {
+        position: absolute;
+        left: 1px;
+    }
+
+    .next {
+        position: absolute;
+        right: 3px;
+    }
 }
 
 div.carousel-inner > .item > .item{
