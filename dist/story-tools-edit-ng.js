@@ -631,10 +631,10 @@
 
               for(var i = 0, ii = $scope.styleTypes.length; i < ii; i++) {
                 var name = $scope.styleTypes[i].name;
+                $scope.styleTypes[i].active = false;
+
                 if (name.indexOf(matchString) >= 0) {
                   idx = i;
-
-                  $scope.styleTypes[i].active = false;
                 }
               }
               return $scope.styleTypes[idx];
@@ -782,11 +782,16 @@
                 $scope.hasStyle = false;
 
                 $scope.styleTypes = stStyleTypes.getTypes(layer, $scope.layerstyles);
+                for (var i = 0, ii = $scope.styleTypes.length; i < ii; i++) {
+                  $scope.styleTypes[i].active = false;
+                }
                 if ($scope.styleTypes.length > 0) {
                     var activeStyleIndex = getStyleTypeIndex();
                     $scope.styleTypes[activeStyleIndex].active = true;
                     setActiveStyle($scope.styleTypes[activeStyleIndex]);
                 }
+
+                console.log('style types...', $scope.styleTypes);
 
                 // the style information load asynchronously,
                 // this checks to see if it is present and  then
