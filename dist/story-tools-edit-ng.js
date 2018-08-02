@@ -791,8 +791,6 @@
                     setActiveStyle($scope.styleTypes[activeStyleIndex]);
                 }
 
-                console.log('style types...', $scope.styleTypes);
-
                 // the style information load asynchronously,
                 // this checks to see if it is present and  then
                 // makes three attempts to get it.
