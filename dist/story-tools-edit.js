@@ -576,7 +576,7 @@ exports.WPSClassify = function() {
                 responseForm: {
                     rawDataOutput: {
                         identifier: {
-                            value: "results"
+                            value: "result"
                         },
                         mimeType: mimeType
                     }
